@@ -10,10 +10,10 @@ def check_legal(deck, banlist = None, only_en = False):
 
     if "oshi" in deck:
         oshi_info = deck["oshi"]
-        if type(oshi_info) is list and len(oshi_info) == 2 and type(oshi_info[0]) is str and type(oshi_info[1]) is int:
+        if type(oshi_info) is list and len(oshi_info) == 2 and type(oshi_info[0]) is str and (type(oshi_info[1]) is int or type(oshi_info[1]) is float):
             oshi_number = oshi_info[0]
             oshi_card = card_info(card_id=oshi_number)
-            oshi_art = oshi_info[1]
+            oshi_art = int(oshi_info[1])
             if "cardType" in oshi_card:
                 if oshi_card["cardType"] == "Oshi":
                     if str(oshi_art) in oshi_card["cardArt"]:
@@ -42,15 +42,15 @@ def check_legal(deck, banlist = None, only_en = False):
     
     if "deck" in deck:
         deck_info = deck["deck"]
-        if type(deck_info) is list and all(type(x) is list and len(x) == 3 and type(x[0]) is str and type(x[1]) is int and type(x[2]) is int for x in deck_info):
+        if type(deck_info) is list and all(type(x) is list and len(x) == 3 and type(x[0]) is str and (type(x[1]) is int or type(x[1]) is float) and (type(x[2]) is int or type(x[2]) is float) for x in deck_info):
             found_debut = False
             total_main = 0
 
             for main_row in deck_info:
                 main_number = main_row[0]
                 main_card = card_info(card_id=main_number)
-                main_count = main_row[1]
-                main_art = main_row[2]
+                main_count = int(main_row[1])
+                main_art = int(main_row[2])
 
                 total_main += main_count
 
@@ -110,14 +110,14 @@ def check_legal(deck, banlist = None, only_en = False):
     
     if "cheerDeck" in deck:
         cheer_info = deck["cheerDeck"]
-        if type(cheer_info) is list and all(type(x) is list and len(x) == 3 and type(x[0]) is str and type(x[1]) is int and type(x[2]) for x in cheer_info):
+        if type(cheer_info) is list and all(type(x) is list and len(x) == 3 and type(x[0]) is str and (type(x[1]) is int or type(x[1]) is float) and type(x[2]) for x in cheer_info):
             total_cheer = 0
 
             for cheer_row in cheer_info:
                 cheer_number = cheer_row[0]
                 cheer_card = card_info(card_id=cheer_number)
-                cheer_count = cheer_row[1]
-                cheer_art = cheer_row[2]
+                cheer_count = int(cheer_row[1])
+                cheer_art = int(cheer_row[2])
 
                 total_cheer += cheer_count
 
