@@ -124,9 +124,9 @@ func setup_info(number,art_code,back=null):
 			oshi_skills = []
 			for skill in card_data.skills:
 				if bool(skill.sp):
-					oshi_skills.append(["%s_SPSKILL_NAME" % cardNumber,skill.cost,bool(skill.sp)])
+					oshi_skills.append(["%s_SPSKILL_NAME" % cardNumber,int(skill.cost),bool(skill.sp)])
 				else:
-					oshi_skills.append(["%s_SKILL_NAME" % cardNumber,skill.cost,bool(skill.sp)])
+					oshi_skills.append(["%s_SKILL_NAME" % cardNumber,int(skill.cost),bool(skill.sp)])
 				
 		"Holomem":
 			bloomed_this_turn = false
@@ -162,7 +162,7 @@ func setup_info(number,art_code,back=null):
 							cost_dict.Yellow += 1
 						"N":
 							cost_dict.Any += 1
-				holomem_arts.append([art.artIndex,cost_dict,art.damage,bool(art.hasPlus),bool(art.hasEffect),null if !art.has("advantage") else art.advantage])
+				holomem_arts.append([int(art.artIndex),cost_dict,int(art.damage),bool(art.hasPlus),bool(art.hasEffect),null if !art.has("advantage") else art.advantage])
 			holomem_arts.sort_custom(func(a,b): return a[0] < b[0]) #Order arts by index
 			holomem_effects = []
 			if card_data.has("effect"):
@@ -311,13 +311,13 @@ func full_desc():
 					result += "[img=18]res://CheerIcons/YellowArts.webp[/img]"
 				for i in range(art[1].Any):
 					result += "[img=18]res://CheerIcons/ColorlessArts.webp[/img]"
-				result += " " + Settings.trans("%s_ART_%s_NAME" % [cardNumber, art[0]])
+				result += " " + Settings.trans("%s_ART_%s_NAME" % [cardNumber, int(art[0])])
 				result += " " + str(art[2]) + ("+" if art[3] else "")
 				if art[5] != null:
 					result += " [img=40]res://Icons/tokkou_50_%s.png[/img]" % art[5].to_lower()
 				result += "[/center]"
 				if art[4]:
-					result += "\n\n" + Settings.trans("%s_ART_%s_EFFECT" % [cardNumber, art[0]])
+					result += "\n\n" + Settings.trans("%s_ART_%s_EFFECT" % [cardNumber, int(art[0])])
 			
 			var costText = ""
 			for i in range(baton_pass_cost):
