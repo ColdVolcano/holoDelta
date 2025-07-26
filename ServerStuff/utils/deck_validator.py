@@ -21,6 +21,8 @@ def check_legal(deck, banlist = None, only_en = False):
                             if only_en and not check_if_card_is_en(oshi_number, oshi_art):
                                 result["legal"] = False
                                 result["reasons"].append(["DECKERROR_ONLYEN",oshi_number])
+                            else:
+                                real_deck["oshi"] = [oshi_number, oshi_art]
                         else:
                             result["legal"] = False
                             result["reasons"].append(["DECKERROR_BANNED",oshi_number])
@@ -46,6 +48,8 @@ def check_legal(deck, banlist = None, only_en = False):
             found_debut = False
             total_main = 0
 
+            real_deck["deck"] = []
+
             for main_row in deck_info:
                 main_number = main_row[0]
                 main_card = card_info(card_id=main_number)
@@ -66,6 +70,8 @@ def check_legal(deck, banlist = None, only_en = False):
                                         if only_en and not check_if_card_is_en(main_number, main_art):
                                             result["legal"] = False
                                             result["reasons"].append(["DECKERROR_ONLYEN",main_number])
+                                        else:
+                                            real_deck["deck"].append([main_number, main_count, main_art])
                                     else:
                                         if banlist[banned_code] == 0:
                                             result["legal"] = False
@@ -73,6 +79,8 @@ def check_legal(deck, banlist = None, only_en = False):
                                         elif banlist[banned_code] < main_count:
                                             result["legal"] = False
                                             result["reasons"].append(["DECKERROR_RESTRICTED",main_number])
+                                        else:
+                                            real_deck["deck"].append([main_number, main_count, main_art])
                                 else:
                                     result["legal"] = False
                                     result["reasons"].append(["DECKERROR_NOALTART",main_number])
@@ -113,6 +121,8 @@ def check_legal(deck, banlist = None, only_en = False):
         if type(cheer_info) is list and all(type(x) is list and len(x) == 3 and type(x[0]) is str and (type(x[1]) is int or type(x[1]) is float) and type(x[2]) for x in cheer_info):
             total_cheer = 0
 
+            real_deck["cheerDeck"] = []
+
             for cheer_row in cheer_info:
                 cheer_number = cheer_row[0]
                 cheer_card = card_info(card_id=cheer_number)
@@ -131,6 +141,8 @@ def check_legal(deck, banlist = None, only_en = False):
                                         if only_en and not check_if_card_is_en(cheer_number, cheer_art):
                                             result["legal"] = False
                                             result["reasons"].append(["DECKERROR_ONLYEN",cheer_number])
+                                        else:
+                                            real_deck["cheerDeck"].append([cheer_number, cheer_count, cheer_art])
                                     else:
                                         if banlist[banned_code] == 0:
                                             result["legal"] = False
@@ -138,6 +150,8 @@ def check_legal(deck, banlist = None, only_en = False):
                                         elif banlist[banned_code] < cheer_count:
                                             result["legal"] = False
                                             result["reasons"].append(["DECKERROR_RESTRICTED",cheer_number])
+                                        else:
+                                            real_deck["cheerDeck"].append([cheer_number, cheer_count, cheer_art])
                                 else:
                                     result["legal"] = False
                                     result["reasons"].append(["DECKERROR_NOALTART",cheer_number])
@@ -167,8 +181,8 @@ def check_legal(deck, banlist = None, only_en = False):
         result["legal"] = False
         result["reasons"].append(["DECKERROR_NOCHEER",""])
     
-    if result["legal"]:
-        real_deck = {"oshi":deck["oshi"],"deck":deck["deck"],"cheerDeck":deck["cheerDeck"]}
+    if not result["legal"]:
+        real_deck = {}
     
     return real_deck, result
 
